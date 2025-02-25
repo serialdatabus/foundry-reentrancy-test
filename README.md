@@ -1,66 +1,71 @@
-## Foundry
+# 🔐 Foundry Reentrancy Attack Test
 
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
+This repository contains a **Foundry based** test suite designed to **simulate and validate reentrancy vulnerabilities** in Solidity smart contracts.
+The objective is to demonstrate how a reentrancy attack can be executed and how to prevent it.
 
-Foundry consists of:
+## 📌 About the Test
 
--   **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
--   **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
--   **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
--   **Chisel**: Fast, utilitarian, and verbose solidity REPL.
+This test simulates a **reentrancy attack** on a vulnerable smart contract, replicating real-world scenarios where funds can be drained before the victim's balance is updated.
 
-## Documentation
+### 🔍 What does this test do?
+- Deploys a **vulnerable smart contract** susceptible to reentrancy.
+- Creates an **attacker contract** that exploits the vulnerability.
+- Uses **Foundry** to automate the execution and validation of the attack.
+- Checks whether the vulnerable contract’s funds can be drained before the balance update.
 
-https://book.getfoundry.sh/
+## ⚙️ How to Run the Test
 
-## Usage
+### 1️⃣ Install Foundry
+If you haven't installed Foundry yet, run:
 
-### Build
-
-```shell
-$ forge build
+```bash
+curl -L https://foundry.paradigm.xyz | bash
+foundryup
 ```
 
-### Test
-
-```shell
-$ forge test
+### 2️⃣ Clone the Repository
+```bash
+git clone https://github.com/your-username/repository-name.git
+cd repository-name
 ```
 
-### Format
-
-```shell
-$ forge fmt
+### 3️⃣ Install Dependencies
+```bash
+forge install
 ```
 
-### Gas Snapshots
+### 4️⃣ Run the Tests
+To run all tests, use:
 
-```shell
-$ forge snapshot
+```bash
+forge test -vv
 ```
 
-### Anvil
+To run only the **Reentrancy Attack Test**, use:
 
-```shell
-$ anvil
+```bash
+forge test --match-test testReentrancyAttack() -vv
 ```
 
-### Deploy
 
-```shell
-$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
-```
+## 🔗 Reference to the Blog
+For a detailed explanation of the reentrancy attack and how this test was built, check out the full article on my blog:
 
-### Cast
+📢 **[🔗 Read the full article](https://thecodepal.com/inside-a-reentrancy-attack-exploiting-testing-in-remix-foundry/)**  
 
-```shell
-$ cast <subcommand>
-```
+---
 
-### Help
+## 🛡️ How to Prevent Reentrancy?
 
-```shell
-$ forge --help
-$ anvil --help
-$ cast --help
-```
+To mitigate this type of vulnerability, consider the following best practices:
+- **Use the Checks-Effects-Interactions pattern** to update balances before making external calls.
+- **Utilize OpenZeppelin’s `reentrancyGuard`** to prevent multiple consecutive calls.
+- **Avoid using `.call{value: amount}("")` directly**, prefer `transfer()` or `send()` when possible.
+
+---
+
+## ⚠️ Disclaimer
+
+This repository is **strictly for educational purposes** and was created to help developers understand and prevent reentrancy vulnerabilities. **Do not use this code for malicious purposes.**
+
+---
